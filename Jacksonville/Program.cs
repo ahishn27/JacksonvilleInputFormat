@@ -15,35 +15,8 @@ namespace Jacksonville
     {
         static void Main()
         {
-            /* string path;
-             string constr;
-             oledbconnection con;
-             string selectstatement;
-             datatable table;
-
-             path = @"C:\users\ahish n\desktop\work\afs\jacksonville.xlsx";
-
-
-             constr = "provider=microsoft.ace.oledb.12.0;data source=" + path + ";extended properties=\"excel 12.0 xml;hdr=yes;imex=1\";";
-
-             con = new oledbconnection(constr);
-             oledbdataadapter adaptor = new oledbdataadapter(selectstatement, con);
-             table = new datatable();
-             oledbconnection conn = new oledbconnection(constr);
-             oledbcommand cmd = new oledbcommand();
-             cmd.connection = conn;
-             oledbdataadapter da = new oledbdataadapter(cmd);
-             datatable dt = new datatable();
-             conn.open();
-             datatable dtsheet = conn.getoledbschematable(oledbschemaguid.tables, null);
-             string sheetname = dtsheet.rows[0]["table_name"].tostring();
-             cmd.commandtext = "select * from [" + sheetname + "]";
-             da.selectcommand = cmd;
-             da.fill(dt);
-             conn.close();*/
-
             Dictionary<string, string> props = new Dictionary<string, string>();
-
+            
             // XLSX - Excel 2007, 2010, 2012, 2013
             //props["Provider"] = "Microsoft.ACE.OLEDB.12.0;";
             //props["Extended Properties"] = "Excel 12.0 XML";
@@ -99,15 +72,10 @@ namespace Jacksonville
             da.Fill(dt);
 
             ds.Tables.Add(dt);
-             
         }
-
         cmd = null;
         conn.Close();
-    }
-
-   
-
+            }
         }
     }
 }
