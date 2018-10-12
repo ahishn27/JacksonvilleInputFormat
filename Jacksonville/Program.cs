@@ -6,6 +6,8 @@ using System.Windows.Forms;
 using System.Data;
 using System.Data.OleDb;
 using System.Text;
+//using  Microsoft.Office.Interop.Excel;
+//using Excel;
 
 
 
@@ -15,6 +17,7 @@ namespace Jacksonville
     {
         static void Main()
         {
+
             Dictionary<string, string> props = new Dictionary<string, string>();
             
             // XLSX - Excel 2007, 2010, 2012, 2013
@@ -41,40 +44,56 @@ namespace Jacksonville
 
             DataSet ds = new DataSet();
 
-    string connectionString = sb.ToString();
+            string connectionString = sb.ToString();
 
-    using (OleDbConnection conn = new OleDbConnection(connectionString))
-    {
-        conn.Open();
-                Console.WriteLine("Connection Open");
-        OleDbCommand cmd = new OleDbCommand();
-        cmd.Connection = conn;
+            using (OleDbConnection conn = new OleDbConnection(connectionString))
+            {
+            conn.Open();
+            Console.WriteLine("Connection Open");
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
 
-        // Get all Sheets in Excel File
-        DataTable dtSheet = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            // Get all Sheets in Excel File
+            DataTable dtSheet = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
 
-        // Loop through all Sheets to get data
-        foreach (DataRow dr in dtSheet.Rows)
-        {
-            string sheetName = dr["TABLE_NAME"].ToString();
+                // Loop through all Sheets to get data
+                foreach (DataRow dr in dtSheet.Rows)
+                {
+                    string sheetName = dr["TABLE_NAME"].ToString();
                     Console.WriteLine(sheetName);
-             
-            if (!sheetName.EndsWith("$"))
-                continue;
 
-            // Get all rows from the Sheet
-            cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
+                    if (!sheetName.EndsWith("$"))
+                        continue;
 
-            DataTable dt = new DataTable();
-            dt.TableName = sheetName;
+                    // Get all rows from the Sheet
+                    // cmd.CommandText = "SELECT * FROM [" + sheetName + "]";
+                    // DataTable dt = oledbConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+                    //OleDbCommand cmd = new OleDbCommand("UPDATE [Sheet1$] SET done='yes' where id=1", oledbConn);
+                    // cmd.ExecuteNonQuery();
+                }
 
-            OleDbDataAdapter da = new OleDbDataAdapter(cmd);
-            da.Fill(dt);
+                // cmd.CommandText = "SELECT * FROM [JacksonvilleS1$] WHERE F6='43402076'";
+                // int result= cmd.ExecuteNonQuery();
+                //   cmd.CommandText = "UPDATE [JacksonvilleS1$]  SET F12='Test1' WHERE F6='43402076'";
+                cmd.CommandText = "INSERT INTO [JacksonvilleS1$] (F1) VALUES ('84356222576')";
+              //  cmd.CommandText = "INSERT INTO [JacksonvilleS1$]  SET F12='Test1' WHERE F6='43402076'";
 
-            ds.Tables.Add(dt);
-        }
-        cmd = null;
-        conn.Close();
+                //Console.WriteLine(result);
+
+                DataTable dt = new DataTable();
+                dt.TableName = "JacksonvilleS1";
+
+                OleDbDataAdapter da = new OleDbDataAdapter(cmd);
+                da.Fill(dt);
+                dt.WriteXml(@"D:\AFS.xml");
+                System.IO.StringWriter writer = new System.IO.StringWriter();
+                dt.WriteXml(writer, XmlWriteMode.IgnoreSchema, false);
+                string result = writer.ToString();
+                Console.WriteLine(result);
+                ds.Tables.Add(dt);
+                //ds.con
+                cmd = null;
+                conn.Close();
             }
         }
     }
