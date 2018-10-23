@@ -47,7 +47,7 @@ namespace Jacksonville
             string connectionString = sb.ToString();
 
             using (OleDbConnection conn = new OleDbConnection(connectionString))
-            {
+            {   
             conn.Open();
             Console.WriteLine("Connection Open");
             OleDbCommand cmd = new OleDbCommand();
@@ -71,18 +71,14 @@ namespace Jacksonville
                     //OleDbCommand cmd = new OleDbCommand("UPDATE [Sheet1$] SET done='yes' where id=1", oledbConn);
                     // cmd.ExecuteNonQuery();
                 }
-
                 // cmd.CommandText = "SELECT * FROM [JacksonvilleS1$] WHERE F6='43402076'";
                 // int result= cmd.ExecuteNonQuery();
-                //   cmd.CommandText = "UPDATE [JacksonvilleS1$]  SET F12='Test1' WHERE F6='43402076'";
-                cmd.CommandText = "INSERT INTO [JacksonvilleS1$] (F1) VALUES ('84356222576')";
-              //  cmd.CommandText = "INSERT INTO [JacksonvilleS1$]  SET F12='Test1' WHERE F6='43402076'";
+                 cmd.CommandText = "UPDATE [JacksonvilleS1$] SET F12='12,52,631',F13='1236', F14='5/19',F15='580075', F16='300,000', F17='900,000', F18='6/19', F19='6/20'  WHERE F6='43402076'";
 
+                cmd.CommandText = "UPDATE [JacksonvilleS1$] SET F12='11,52,531',F13='22361', F14='4/19',F15='580075', F16='300,000', F17='900,000', F18='5/17', F19='5/18'  WHERE F6='43539496'";
                 //Console.WriteLine(result);
-
                 DataTable dt = new DataTable();
                 dt.TableName = "JacksonvilleS1";
-
                 OleDbDataAdapter da = new OleDbDataAdapter(cmd);
                 da.Fill(dt);
                 dt.WriteXml(@"D:\AFS.xml");
